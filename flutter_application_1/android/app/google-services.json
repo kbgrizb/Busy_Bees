@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "588187581127",
+    "project_id": "busybees-132f3",
+    "storage_bucket": "busybees-132f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588187581127:android:e94e9d6896495661375ce2",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArL0gyqzrGLik1UysNZTfXkGF8tHnWtmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
