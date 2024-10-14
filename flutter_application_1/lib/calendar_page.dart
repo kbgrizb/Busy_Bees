@@ -47,6 +47,8 @@ List<Event> _getEventsForDay(DateTime day){
   return events[day]??[];
 }
 
+List<Event>? list;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,9 +67,16 @@ List<Event> _getEventsForDay(DateTime day){
               actions: [
                 ElevatedButton(
                   onPressed: (){
+                    if (events[_selectedDay] != null){
+                      list = events[_selectedDay]!;
+                      events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text)]],});
+                    }else{
+                    
                     events.addAll({
                       _selectedDay!:[Event(_eventNameController.text)]
                     });
+                    }
+                    _eventNameController.text = "";
                     Navigator.of(context).pop();
                     _selectedEvents.value = _getEventsForDay(_selectedDay!);
                   },
