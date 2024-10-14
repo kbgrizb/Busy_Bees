@@ -1,10 +1,11 @@
 
 import 'dart:core';
-
-
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/calendar_page.dart';
 import 'package:gtk_flutter/objects/events.dart';
+
+//if this file is red for you, its probably due to some difference in the events.dart page
+//this has to do with the event time variable issue I added on github
 
 class UpcomingEventsList{
     UpcomingEventsList({required this.eventsData});

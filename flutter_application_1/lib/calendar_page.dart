@@ -8,7 +8,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
 
-//for testing
+//**********for testing, can be replaced with the events stored in the cloud************
+
 //List<Events> eventsData = [(Events(date: DateTime(2024, 10, 20, 17, 30), description: 'test'))];
 //UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
@@ -50,12 +51,17 @@ onPageChanged: (focusedDay) {
   focusedDay = focusedDay;
 },
     ),
-    /*bottomNavigationBar: 
+
+
+    /*******this is a button that connects to the upcoming events page, i chose a random icon**********
+
+    bottomNavigationBar: 
     
                / ElevatedButton(onPressed: () async {await Navigator.of(context).push(
               MaterialPageRoute(
         
                 builder: (context) => UpcomingEventsPage(upcomingEventsList: eventsList),
+                *********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
                 child: const Icon(Icons.accessible)),*/
