@@ -1,6 +1,7 @@
 class Event {
     final String title;
-    Event(this.title);
+    final String description;
+    Event(this.title, this.description);
 
     @override
     String toString(){

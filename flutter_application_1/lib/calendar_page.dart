@@ -18,6 +18,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   Map<DateTime, List<Event>> events = {};
   TextEditingController _eventNameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   CalendarFormat calendarFormat = CalendarFormat.month;
   late final ValueNotifier<List<Event>> _selectedEvents;
 
@@ -60,23 +61,32 @@ List<Event>? list;
           showDialog(context: context, builder: (context){
             return AlertDialog(
               scrollable: true,
-              title: Text("Event Name"),
-              content: Padding(padding: EdgeInsets.all(8),
-              child: TextField(controller: _eventNameController),
-              ),
+              title: Text("Add New Event"),
+              content: Column(
+                children: [
+               TextField(
+                controller: _eventNameController,
+                decoration: InputDecoration(hintText: "Event Name"),
+                ),
+                TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(hintText: "Event Description"),
+                ),
+              ]),
               actions: [
                 ElevatedButton(
                   onPressed: (){
                     if (events[_selectedDay] != null){
                       list = events[_selectedDay]!;
-                      events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text)]],});
+                      events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text)]],});
                     }else{
                     
                     events.addAll({
-                      _selectedDay!:[Event(_eventNameController.text)]
+                      _selectedDay!:[Event(_eventNameController.text, _descriptionController.text)]
                     });
                     }
                     _eventNameController.text = "";
+                    _descriptionController.text = "";
                     Navigator.of(context).pop();
                     _selectedEvents.value = _getEventsForDay(_selectedDay!);
                   },
@@ -123,6 +133,7 @@ List<Event>? list;
               child: ListTile(
                 onTap: ()=>print(""),
                 title:Text("${value[index]}"),
+                subtitle: Text(value[index].description),
               ),
             );
         });
