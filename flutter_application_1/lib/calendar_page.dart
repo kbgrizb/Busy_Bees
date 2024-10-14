@@ -1,14 +1,17 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/event.dart';
+import 'package:gtk_flutter/upcoming_events_list.dart';
+import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
 
 //**********for testing, can be replaced with the events stored in the cloud************
 
-List<Events> eventsData = [(Events(dateAndTime: DateTime(2024, 10, 20, 17, 30), description: 'test'))];
+List<Events> eventsData = [(Events(DateTime(2024, 10, 20, 17, 30), 'testing', 'test'))];
 UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
 class CalendarPage extends StatefulWidget {
@@ -21,11 +24,11 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
-  Map<DateTime, List<Event>> events = {};
+  Map<DateTime, List<Events>> events = {};
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   CalendarFormat calendarFormat = CalendarFormat.month;
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late final ValueNotifier<List<Events>> _selectedEvents;
 
   @override
   void initState() {
@@ -49,11 +52,11 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-List<Event> _getEventsForDay(DateTime day){
+List<Events> _getEventsForDay(DateTime day){
   return events[day]??[];
 }
 
-List<Event>? list;
+List<Events>? list;
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +86,11 @@ List<Event>? list;
                   onPressed: (){
                     if (events[_selectedDay] != null){
                       list = events[_selectedDay]!;
-                      events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text)]],});
+                      events.addAll({_selectedDay!: [...list!, ...[Events(_selectedDay as DateTime, _eventNameController.text, _descriptionController.text)]],});
                     }else{
                     
                     events.addAll({
-                      _selectedDay!:[Event(_eventNameController.text, _descriptionController.text)]
+                      _selectedDay!:[Events(_selectedDay as DateTime, _eventNameController.text, _descriptionController.text)]
                     });
                     }
                     _eventNameController.text = "";
@@ -123,7 +126,7 @@ List<Event>? list;
       ),
       SizedBox(height: 8.0),
       Expanded(
-      child: ValueListenableBuilder<List<Event>>
+      child: ValueListenableBuilder<List<Events>>
         (valueListenable: _selectedEvents, 
         builder: (context,value,_){
           return ListView.builder(
