@@ -1,9 +1,16 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/objects/events.dart';
+import 'package:gtk_flutter/upcoming_events_list.dart';
+import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
+
+//for testing
+//List<Events> eventsData = [(Events(date: DateTime(2024, 10, 20, 17, 30), description: 'test'))];
+//UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -22,7 +29,8 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         title: const Text('BusyBees'),
       ),
-      body: TableCalendar(
+      body: 
+      TableCalendar(
         headerStyle: const HeaderStyle(
         formatButtonVisible: false,
         ),
@@ -41,7 +49,19 @@ onDaySelected: (selectedDay, focusedDay) {
 onPageChanged: (focusedDay) {
   focusedDay = focusedDay;
 },
-    )
+    ),
+    /*bottomNavigationBar: 
+    
+               / ElevatedButton(onPressed: () async {await Navigator.of(context).push(
+              MaterialPageRoute(
+        
+                builder: (context) => UpcomingEventsPage(upcomingEventsList: eventsList),
+              ),
+            );},
+                child: const Icon(Icons.accessible)),*/
+              
+   
     );
+    
   }
   }
