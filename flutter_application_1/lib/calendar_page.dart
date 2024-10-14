@@ -1,7 +1,11 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'app_state.dart';
+import 'src/authentication.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
 
@@ -32,7 +36,9 @@ class _CalendarPageState extends State<CalendarPage> {
       selectedDayPredicate: (day) {
   return isSameDay(_selectedDay, day);
 },
+
 onDaySelected: (selectedDay, focusedDay) {
+  
   setState(() {
     _selectedDay = selectedDay;
     _focusedDay = focusedDay;
