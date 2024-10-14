@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 
+// ignore: must_be_immutable
 class UpcomingEventsPage extends StatefulWidget{
   UpcomingEventsPage({required this.upcomingEventsList});
 
