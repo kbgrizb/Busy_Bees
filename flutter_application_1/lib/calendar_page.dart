@@ -14,8 +14,6 @@ import 'src/widgets.dart';
 
 //**********for testing, can be replaced with the events stored in the cloud************
 
-List<Events> eventsData = [(Events(DateTime(2024, 10, 20, 17, 30), 'testing', 'test'))];
-UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -27,11 +25,11 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
-  Map<DateTime, List<Events>> events = {};
+  Map<DateTime, List<Event>> events = {};
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   CalendarFormat calendarFormat = CalendarFormat.month;
-  late final ValueNotifier<List<Events>> _selectedEvents;
+  late final ValueNotifier<List<Event>> _selectedEvents;
 
   @override
   void initState() {
@@ -136,7 +134,7 @@ List<Event>? list;
       ),
       SizedBox(height: 8.0),
       Expanded(
-      child: ValueListenableBuilder<List<Events>>
+      child: ValueListenableBuilder<List<Event>>
         (valueListenable: _selectedEvents, 
         builder: (context,value,_){
           return ListView.builder(
@@ -165,7 +163,7 @@ List<Event>? list;
               MaterialPageRoute(
         
                 builder: (context) => UpcomingEventsPage(
-                  upcomingEventsList: UpcomingEventsList(eventsData: _getAllEvents())),
+                  upcomingEventsList: UpcomingEventsList(eventsData: events)),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
