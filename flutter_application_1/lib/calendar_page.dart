@@ -1,15 +1,16 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/event.dart';
+import 'package:gtk_flutter/upcoming_events.dart';
+import 'package:gtk_flutter/upcoming_events_list.dart';
+import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
 
 //**********for testing, can be replaced with the events stored in the cloud************
-
-List<Events> eventsData = [(Events(dateAndTime: DateTime(2024, 10, 20, 17, 30), description: 'test'))];
-UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -151,11 +152,11 @@ List<Event>? list;
                 ElevatedButton(onPressed: () async {await Navigator.of(context).push(
               MaterialPageRoute(
         
-                builder: (context) => UpcomingEventsPage(upcomingEventsList: eventsList),
+                builder: (context) => UpcomingEventsPage(upcomingEventsList: UpcomingEventsList(eventsData: _getEventsForDay(_selectedDay!))),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
-                child: const Icon(Icons.accessible)),
+                child: const Icon(Icons.list)),
               
     );
     

@@ -1,11 +1,11 @@
 
-import 'dart:core';
+/*import 'dart:core';
 
 
 import 'package:gtk_flutter/objects/events.dart';
 
-class UpcomingEventsList{
-    UpcomingEventsList({required this.eventsData});
+class UpcomingEvents{
+    UpcomingEvents({required this.eventsData});
     //will need to talk to firebase to parse through upcoming events and get the most recent ones
     DateTime currentDate = DateTime.now();
 
@@ -25,4 +25,4 @@ class UpcomingEventsList{
         return upcomingEventsList;
     }
     
-}
+}*/

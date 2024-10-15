@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/objects/events.dart';
+import 'package:gtk_flutter/src/event.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 
 // ignore: must_be_immutable
@@ -19,7 +20,7 @@ class _UpcomingEventsPageState extends State<UpcomingEventsPage> {
   
   @override
   Widget build(BuildContext context) {
-    List<Events> upcomingEventsList = widget.upcomingEventsList.getUpcomingEvents();
+    List<Event> upcomingEventsList = widget.upcomingEventsList.getUpcomingEvents();
     return Scaffold(
        appBar: AppBar(
           title: const Text('Upcoming Events'),
