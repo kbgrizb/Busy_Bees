@@ -3,6 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/event.dart';
+import 'package:gtk_flutter/upcoming_events.dart';
+import 'package:gtk_flutter/upcoming_events_list.dart';
+import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -154,11 +157,11 @@ List<Events>? list;
                 ElevatedButton(onPressed: () async {await Navigator.of(context).push(
               MaterialPageRoute(
         
-                builder: (context) => UpcomingEventsPage(upcomingEventsList: eventsList),
+                builder: (context) => UpcomingEventsPage(upcomingEventsList: UpcomingEventsList(eventsData: _getEventsForDay(_selectedDay!))),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
-                child: const Icon(Icons.accessible)),
+                child: const Icon(Icons.list)),
               
     );
     
