@@ -89,15 +89,15 @@ List<Event>? list;
               actions: [
                 ElevatedButton(
                   onPressed: (){
-                    //if (events[_selectedDay] != null){
-                     // list = events[_selectedDay]!;
-                     // events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text)]],});
-                    //}else{
+                    if (events[_selectedDay] != null){
+                     list = events[_selectedDay]!;
+                     events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text, _selectedDay as DateTime)]],});
+                    }else{
                     
                     events.addAll({
-                      _selectedDay!:[Event(_eventNameController.text, _descriptionController.text)]
+                      _selectedDay!:[Event(_eventNameController.text, _descriptionController.text, _selectedDay as DateTime)]
                     });
-                   // }
+                   }
                     _eventNameController.text = "";
                     _descriptionController.text = "";
                     Navigator.of(context).pop();

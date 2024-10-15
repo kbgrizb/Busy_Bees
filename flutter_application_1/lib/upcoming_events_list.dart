@@ -17,7 +17,11 @@ class UpcomingEventsList{
     List<Event> getUpcomingEvents(){
         List<Event> upcomingEventsList = [];
         for (var event in eventsData.values) {
-          upcomingEventsList.addAll(event);
+          for (var y in event){
+          if(y.getDate().compareTo(currentDate) >= 0){
+              upcomingEventsList.addAll(event);
+          }
+          }
         }
         return upcomingEventsList;
     }
