@@ -1,15 +1,16 @@
-/*class Event {
-    final String title;
-    final String description;
-    Event(this.title, this.description);
+class Event {
+  final DateTime dateAndTime;
+  final String description;
+  final String title;
+  Event(this.dateAndTime, this.title, this.description);
 
-    @override
+  
+
+  DateTime getDate(){
+    return dateAndTime;
+  }
+  @override
     String toString(){
       return title;
     }
-
-
 }
-
-
-*/

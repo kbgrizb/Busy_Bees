@@ -2,6 +2,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:gtk_flutter/calendar_page.dart';
+import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/event.dart';
 
 //if this file is red for you, its probably due to some difference in the events.dart page

@@ -11,9 +11,14 @@ import 'package:provider/provider.dart';                 // new
 import 'app_state.dart';                                 // new
 import 'calendar_page.dart';
 
+
+
 void main() {
   // Modify from here...
   WidgetsFlutterBinding.ensureInitialized();
+
+  
+
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
@@ -27,7 +32,7 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const CalendarPage(),
+      builder: (context, state) => CalendarPage(),
       routes: [
         GoRoute(
           path: 'sign-in',

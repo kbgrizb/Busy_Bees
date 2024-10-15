@@ -1,4 +1,4 @@
-class Events {
+/*class Events {
   final DateTime dateAndTime;
   final String description;
   final String title;
@@ -13,18 +13,4 @@ class Events {
     String toString(){
       return title;
     }
-
-}
-/*
-class Event {
-    final String title;
-    final String description;
-    Event(this.title, this.description);
-
-    @override
-    String toString(){
-      return title;
-    }
-
-
 }*/
