@@ -6,11 +6,16 @@ import 'package:gtk_flutter/src/event.dart';
 import 'package:gtk_flutter/upcoming_events.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 import 'package:gtk_flutter/upcoming_events_page.dart';
+import 'package:gtk_flutter/upcoming_events_list.dart';
+import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
 
 //**********for testing, can be replaced with the events stored in the cloud************
+
+List<Events> eventsData = [(Events(DateTime(2024, 10, 20, 17, 30), 'testing', 'test'))];
+UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -22,11 +27,11 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
-  Map<DateTime, List<Event>> events = {};
+  Map<DateTime, List<Events>> events = {};
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   CalendarFormat calendarFormat = CalendarFormat.month;
-  late final ValueNotifier<List<Event>> _selectedEvents;
+  late final ValueNotifier<List<Events>> _selectedEvents;
 
   @override
   void initState() {
@@ -131,7 +136,7 @@ List<Event>? list;
       ),
       SizedBox(height: 8.0),
       Expanded(
-      child: ValueListenableBuilder<List<Event>>
+      child: ValueListenableBuilder<List<Events>>
         (valueListenable: _selectedEvents, 
         builder: (context,value,_){
           return ListView.builder(
