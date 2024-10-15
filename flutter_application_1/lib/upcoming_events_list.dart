@@ -19,7 +19,7 @@ class UpcomingEventsList{
         for (var event in eventsData.values) {
           for (var y in event){
           if(y.getDate().compareTo(currentDate) >= 0){
-              upcomingEventsList.addAll(event);
+              upcomingEventsList.add(y);
           }
           }
         }
