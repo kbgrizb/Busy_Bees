@@ -1,8 +1,10 @@
-class Event{
-  final DateTime dateAndTime;
-  final String description;
-  final String title;
-  Event(this.dateAndTime, this.title, this.description);
+import 'dart:core';
+
+class Event {
+    final String title;
+    final DateTime dateAndTime;
+    final String description;
+    Event(this.title, this.description, this.dateAndTime);
 
   
 
@@ -14,7 +16,11 @@ class Event{
       return title;
     }
 
-  String getDescription(){
-    return description;
-  }
+    DateTime getDate(){
+      return dateAndTime;
+    }
+
+
 }
+
+

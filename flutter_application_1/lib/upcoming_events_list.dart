@@ -16,29 +16,18 @@ class UpcomingEventsList{
 
     Map<DateTime, List<Event>> eventsData;
 
-
     List<Event> getUpcomingEvents(){
         List<Event> upcomingEventsList = [];
-        for(var v in eventsData.values) {
-          for(var y in v){
+        for (var event in eventsData.values) {
+          for (var y in event){
           if(y.getDate().compareTo(currentDate) >= 0){
-            //if((y.getDate().subtract(14 as Duration)).compareTo(currentDate) >= 0){
-             // upcomingEventsList.add(y);
-            //}
-            upcomingEventsList.add(y);
+              upcomingEventsList.add(y);
           }
-        //if(upcomingEventsList.isEmpty){
-          //List<Event> defaultList = [Event(DateTime(3000), "No Upcoming Events", "This is where you'll see your upcoming events!")];
-          //return defaultList;
-        //}
-          
-  }
-        
-}
-return upcomingEventsList;
+          }
+        }
+        return upcomingEventsList;
     }
 }
-    
 
 
 

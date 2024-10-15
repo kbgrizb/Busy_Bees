@@ -13,8 +13,6 @@ import 'src/widgets.dart';
 
 //**********for testing, can be replaced with the events stored in the cloud************
 
-//List<Events> eventsData = [(Events(DateTime(2024, 10, 20, 17, 30), 'testing', 'test'))];
-//UpcomingEventsList eventsList = UpcomingEventsList(eventsData: eventsData);
 
 class CalendarPage extends StatefulWidget {
   CalendarPage({super.key/*,required this.eventsData*/});
@@ -56,8 +54,15 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
+
+
 List<Event> _getEventsForDay(DateTime day){
   return events[day]??[];
+}
+
+Map<DateTime, List<Event>> _getAllEvents(){
+  return events;
+
 }
 
 List<Event>? list;
@@ -89,14 +94,14 @@ List<Event>? list;
                 ElevatedButton(
                   onPressed: (){
                     if (events[_selectedDay] != null){
-                      list = events[_selectedDay]!;
-                      events.addAll({_selectedDay!: [...list!, ...[Event(_selectedDay as DateTime, _eventNameController.text, _descriptionController.text)]],});
+                     list = events[_selectedDay]!;
+                     events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text, _selectedDay as DateTime)]],});
                     }else{
                     
                     events.addAll({
-                      _selectedDay!:[Event(_selectedDay as DateTime, _eventNameController.text, _descriptionController.text)]
+                      _selectedDay!:[Event(_eventNameController.text, _descriptionController.text, _selectedDay as DateTime)]
                     });
-                    }
+                   }
                     _eventNameController.text = "";
                     _descriptionController.text = "";
                     Navigator.of(context).pop();
@@ -158,7 +163,8 @@ List<Event>? list;
                 ElevatedButton(onPressed: () async {await Navigator.of(context).push(
               MaterialPageRoute(
         
-                builder: (context) => UpcomingEventsPage(upcomingEventsList: UpcomingEventsList(eventsData: _getEventsForDay(_selectedDay!))),
+                builder: (context) => UpcomingEventsPage(
+                  upcomingEventsList: UpcomingEventsList(eventsData: events)),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
