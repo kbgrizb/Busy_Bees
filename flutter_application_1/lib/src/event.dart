@@ -1,4 +1,4 @@
-class Event {
+class Event{
   final DateTime dateAndTime;
   final String description;
   final String title;
@@ -10,7 +10,11 @@ class Event {
     return dateAndTime;
   }
   @override
-    String toString(){
+    String getTitle(){
       return title;
     }
+
+  String getDescription(){
+    return description;
+  }
 }
