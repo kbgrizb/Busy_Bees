@@ -3,6 +3,7 @@ import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/event.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 
+
 // ignore: must_be_immutable
 class UpcomingEventsPage extends StatefulWidget{
   UpcomingEventsPage({required this.upcomingEventsList});
@@ -16,7 +17,8 @@ class UpcomingEventsPage extends StatefulWidget{
 }
 
 class _UpcomingEventsPageState extends State<UpcomingEventsPage> {
-  
+ 
+
   
   @override
   Widget build(BuildContext context) {

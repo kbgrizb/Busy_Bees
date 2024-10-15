@@ -50,8 +50,15 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
+
+
 List<Event> _getEventsForDay(DateTime day){
   return events[day]??[];
+}
+
+Map<DateTime, List<Event>> _getAllEvents(){
+  return events;
+
 }
 
 List<Event>? list;
@@ -82,15 +89,15 @@ List<Event>? list;
               actions: [
                 ElevatedButton(
                   onPressed: (){
-                    if (events[_selectedDay] != null){
-                      list = events[_selectedDay]!;
-                      events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text)]],});
-                    }else{
+                    //if (events[_selectedDay] != null){
+                     // list = events[_selectedDay]!;
+                     // events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text)]],});
+                    //}else{
                     
                     events.addAll({
                       _selectedDay!:[Event(_eventNameController.text, _descriptionController.text)]
                     });
-                    }
+                   // }
                     _eventNameController.text = "";
                     _descriptionController.text = "";
                     Navigator.of(context).pop();
@@ -152,7 +159,8 @@ List<Event>? list;
                 ElevatedButton(onPressed: () async {await Navigator.of(context).push(
               MaterialPageRoute(
         
-                builder: (context) => UpcomingEventsPage(upcomingEventsList: UpcomingEventsList(eventsData: _getEventsForDay(_selectedDay!))),
+                builder: (context) => UpcomingEventsPage(
+                  upcomingEventsList: UpcomingEventsList(eventsData: _getAllEvents())),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},

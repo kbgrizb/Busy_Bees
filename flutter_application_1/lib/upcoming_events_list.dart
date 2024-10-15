@@ -12,20 +12,15 @@ class UpcomingEventsList{
     //will need to talk to firebase to parse through upcoming events and get the most recent ones
     DateTime currentDate = DateTime.now();
 
-    List<Event> eventsData;
-
+    Map<DateTime, List<Event>> eventsData;
 
     List<Event> getUpcomingEvents(){
         List<Event> upcomingEventsList = [];
-        for (var event in eventsData) {
-            //if (event.getDate().difference(currentDate) <= duration){
-                upcomingEventsList.add(event);
-            //}
-          
+        for (var event in eventsData.values) {
+          upcomingEventsList.addAll(event);
         }
         return upcomingEventsList;
     }
-    
 }
 
 
