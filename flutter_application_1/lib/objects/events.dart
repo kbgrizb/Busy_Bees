@@ -1,4 +1,4 @@
-class Events {
+/*class Events {
   Events({required this.dateAndTime, required this.description});
 
   DateTime dateAndTime;
@@ -8,4 +8,4 @@ class Events {
     return dateAndTime;
   }
 
-}
+}*/
