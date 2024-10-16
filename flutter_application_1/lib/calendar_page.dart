@@ -1,13 +1,18 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:gtk_flutter/app_state.dart';
 import 'package:gtk_flutter/objects/events.dart';
+import 'package:gtk_flutter/src/authentication.dart';
 import 'package:gtk_flutter/src/event.dart';
 import 'package:gtk_flutter/upcoming_events.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 import 'package:gtk_flutter/upcoming_events_page.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
 //https://pub.dev/packages/table_calendar <-- where I got the table calendar
@@ -66,53 +71,67 @@ Map<DateTime, List<Event>> _getAllEvents(){
 
 List<Event>? list;
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('BusyBees'),
       ),
+      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(context: context, builder: (context){
-            return AlertDialog(
-              scrollable: true,
-              title: Text("Add New Event"),
-              content: Column(
-                children: [
-               TextField(
-                controller: _eventNameController,
-                decoration: InputDecoration(hintText: "Event Name"),
-                ),
-                TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(hintText: "Event Description"),
-                ),
-              ]),
-              actions: [
-                ElevatedButton(
-                  onPressed: (){
-                    if (events[_selectedDay] != null){
-                     list = events[_selectedDay]!;
-                     events.addAll({_selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text, _selectedDay as DateTime)]],});
-                    }else{
-                    
-                    events.addAll({
-                      _selectedDay!:[Event(_eventNameController.text, _descriptionController.text, _selectedDay as DateTime)]
-                    });
-                   }
-                    _eventNameController.text = "";
-                    _descriptionController.text = "";
-                    Navigator.of(context).pop();
-                    _selectedEvents.value = _getEventsForDay(_selectedDay!);
-                  },
-                  child: Text("OK"),
-                )
-              ],
-            );
-          });
-        },
-        child: Icon(Icons.add),
+              final appState = context.read<ApplicationState>();
+              if (!appState.loggedIn) {
+                context.push('/sign-in');
+              } else {
+                showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    scrollable: true,
+                    title: const Text("Add New Event"),
+                    content: Column(
+                      children: [
+                        TextField(
+                          controller: _eventNameController,
+                          decoration: const InputDecoration(hintText: "Event Name"),
+                        ),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(hintText: "Event Description"),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          if (events[_selectedDay] != null) {
+                            list = events[_selectedDay]!;
+                            events.addAll({
+                              _selectedDay!: [...list!, ...[Event(_eventNameController.text, _descriptionController.text, _selectedDay!)]],
+                            });
+                          } else {
+                            events.addAll({
+                              _selectedDay!: [Event(_eventNameController.text, _descriptionController.text, _selectedDay!)],
+                            });
+                          }
+                          _eventNameController.clear();
+                          _descriptionController.clear();
+                          Navigator.of(context).pop();
+                          _selectedEvents.value = _getEventsForDay(_selectedDay!);
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          },
+          child: const Icon(Icons.add),
+
         ),
       body: Column(
         children: [

@@ -16,6 +16,7 @@ class AuthFunc extends StatelessWidget {
 
   final bool loggedIn;
   final void Function() signOut;
+  
 
   @override
   Widget build(BuildContext context) {
