@@ -94,9 +94,11 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('BusyBees'),
+        foregroundColor: Color.fromARGB(255, 221, 192, 0)
       ),
 
       floatingActionButton: FloatingActionButton(
+        backgroundColor:Color.fromARGB(255, 255, 208, 0),
         onPressed: () {
           final appState = context.read<ApplicationState>();
           if (!appState.loggedIn) {
