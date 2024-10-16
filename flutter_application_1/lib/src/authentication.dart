@@ -16,7 +16,6 @@ class AuthFunc extends StatelessWidget {
 
   final bool loggedIn;
   final void Function() signOut;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +27,18 @@ class AuthFunc extends StatelessWidget {
               onPressed: () {
                 !loggedIn ? context.push('/sign-in') : signOut();
               },
-              child: !loggedIn ? const Text('TEXT') : const Text('Logout')),
+              child: !loggedIn ? const Text('Add Event?') : const Text('Logout')),
         ),
         Visibility(
-          visible: loggedIn,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24, bottom: 8),
-            child: StyledButton(
-                onPressed: () {
-                  context.push('/profile');
-                },
-                child: const Text('Profile')),
-          ),
-        )
+            visible: loggedIn,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 24, bottom: 8),
+              child: StyledButton(
+                  onPressed: () {
+                    context.push('/profile');
+                  },
+                  child: const Text('Profile')),
+            ))
       ],
     );
   }

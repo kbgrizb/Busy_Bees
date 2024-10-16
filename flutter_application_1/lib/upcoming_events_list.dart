@@ -11,6 +11,8 @@ class UpcomingEventsList{
     UpcomingEventsList({required this.eventsData});
     //will need to talk to firebase to parse through upcoming events and get the most recent ones
     DateTime currentDate = DateTime.now();
+    
+    
 
     Map<DateTime, List<Event>> eventsData;
 
@@ -22,6 +24,7 @@ class UpcomingEventsList{
         return upcomingEventsList;
     }
 }
+
 
 
 class EventListItem extends StatefulWidget {
