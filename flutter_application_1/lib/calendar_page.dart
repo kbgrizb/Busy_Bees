@@ -26,6 +26,7 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat calendarFormat = CalendarFormat.month;
   late final ValueNotifier<List<Event>> _selectedEvents;
 
+
   StreamSubscription<QuerySnapshot>? _guestBookSubscription;
   Map<DateTime, List<Event>> events = {};
 
@@ -58,6 +59,7 @@ class _CalendarPageState extends State<CalendarPage> {
             doc['eventname'],
             doc['description'],
             eventDate,
+            doc['name'],
           );
 
           if (events[normalizedDate] != null) {
@@ -122,7 +124,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       onPressed: () {
                         DateTime selectedDay = DateTime(
                           _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-
+                          
                         FirebaseFirestore.instance.collection('events').add({
                           'description': _descriptionController.text,
                           'date': selectedDay,  // Save normalized date
@@ -130,14 +132,15 @@ class _CalendarPageState extends State<CalendarPage> {
                           'name': FirebaseAuth.instance.currentUser!.displayName,
                           'userId': FirebaseAuth.instance.currentUser!.uid,
                         });
+                        String curUser = FirebaseAuth.instance.currentUser!.uid;
 
                         if (events[selectedDay] != null) {
                           events[selectedDay]!.add(
-                            Event(_eventNameController.text, _descriptionController.text, selectedDay),
+                            Event(_eventNameController.text, _descriptionController.text, selectedDay,curUser),
                           );
                         } else {
                           events[selectedDay] = [
-                            Event(_eventNameController.text, _descriptionController.text, selectedDay)
+                            Event(_eventNameController.text, _descriptionController.text, selectedDay,curUser)
                           ];
                         }
                         _eventNameController.clear();
@@ -162,12 +165,15 @@ class _CalendarPageState extends State<CalendarPage> {
               formatButtonVisible: false,
             ),
             firstDay: DateTime.utc(2024, 1, 1),
-            lastDay: DateTime.utc(2030, 12, 31),
-            focusedDay: _focusedDay,
-            eventLoader: _getEventsForDay,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
+        lastDay: DateTime.utc(2030, 12, 31),
+        focusedDay: _focusedDay,
+        calendarStyle: const CalendarStyle(
+        defaultTextStyle:TextStyle(color: Colors.orange),
+        weekendTextStyle:TextStyle(color: Colors.amber),
+        todayDecoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
+        selectedDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+        markerDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle)
+        ),
             onDaySelected: _onDaySelected,
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
@@ -190,6 +196,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       child: ListTile(
                         title: Text(value[index].getTitle()),
                         subtitle: Text(value[index].description),
+                        trailing: Text(value[index].getUsername()),
                       ),
                     );
                   },

@@ -4,7 +4,8 @@ class Event {
     final String title;
     final DateTime dateAndTime;
     final String description;
-    Event(this.title, this.description, this.dateAndTime);
+    final String username;
+    Event(this.title, this.description, this.dateAndTime,this.username);
 
   
 
@@ -16,7 +17,9 @@ class Event {
       return title;
     }
 
-    
+    String getUsername(){
+      return username;
+    }
 
 
 }
