@@ -7,7 +7,6 @@ import 'package:gtk_flutter/app_state.dart';
 import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/authentication.dart';
 import 'package:gtk_flutter/src/event.dart';
-import 'package:gtk_flutter/upcoming_events.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
@@ -21,7 +20,8 @@ import 'src/widgets.dart';
 
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+  CalendarPage({super.key/*,required this.eventsData*/});
+  //List<Events> eventsData;
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -41,6 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    
   }
 
   @override

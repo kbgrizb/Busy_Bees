@@ -6,8 +6,13 @@ class Event {
     final String description;
     Event(this.title, this.description, this.dateAndTime);
 
-    @override
-    String toString(){
+  
+
+  DateTime getDate(){
+    return dateAndTime;
+  }
+  @override
+    String getTitle(){
       return title;
     }
 
