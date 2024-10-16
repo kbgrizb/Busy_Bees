@@ -169,7 +169,7 @@ List<Event>? list;
         weekendTextStyle:TextStyle(color: Colors.amber),
         todayDecoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
         selectedDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-        
+        markerDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle)
         ),
         eventLoader: _getEventsForDay,
         selectedDayPredicate: (day) {
