@@ -164,6 +164,13 @@ List<Event>? list;
         firstDay: DateTime.utc(2024, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
         focusedDay: _focusedDay,
+        calendarStyle: const CalendarStyle(
+        defaultTextStyle:TextStyle(color: Colors.orange),
+        weekendTextStyle:TextStyle(color: Colors.amber),
+        todayDecoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
+        selectedDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+        
+        ),
         eventLoader: _getEventsForDay,
         selectedDayPredicate: (day) {
           return isSameDay(_selectedDay, day);
