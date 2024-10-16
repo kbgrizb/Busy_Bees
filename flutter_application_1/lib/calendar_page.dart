@@ -111,8 +111,11 @@ List<Event>? list;
                       ],
                     ),
                     actions: [
-                      ElevatedButton(
-                        onPressed: () {
+                      ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: _eventNameController,
+                      builder: (context, value, child) {
+                      return ElevatedButton(
+                        onPressed: value.text.isNotEmpty? () {
                           User? user = FirebaseAuth.instance.currentUser;
 
                           FirebaseFirestore.instance.collection('events').add(<String, dynamic>{
@@ -137,8 +140,11 @@ List<Event>? list;
                           _descriptionController.clear();
                           Navigator.of(context).pop();
                           _selectedEvents.value = _getEventsForDay(_selectedDay!);
-                        },
+                        }
+                        : null,
                         child: const Text("OK"),
+                      );
+                      },
                       ),
                     ],
                   );
@@ -158,6 +164,13 @@ List<Event>? list;
         firstDay: DateTime.utc(2024, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
         focusedDay: _focusedDay,
+        calendarStyle: const CalendarStyle(
+        defaultTextStyle:TextStyle(color: Colors.orange),
+        weekendTextStyle:TextStyle(color: Colors.amber),
+        todayDecoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
+        selectedDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+        
+        ),
         eventLoader: _getEventsForDay,
         selectedDayPredicate: (day) {
           return isSameDay(_selectedDay, day);
@@ -183,7 +196,7 @@ List<Event>? list;
               ),
               child: ListTile(
                 onTap: ()=>print(""),
-                title:Text("${value[index]}"),
+                title:Text(value[index].title),
                 subtitle: Text(value[index].description),
               ),
             );
@@ -198,7 +211,7 @@ List<Event>? list;
               MaterialPageRoute(
         
                 builder: (context) => UpcomingEventsPage(
-                  upcomingEventsList: UpcomingEventsList(eventsData: events)),
+                  upcomingEventsList: UpcomingEventsList(eventsData: _getAllEvents())),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
