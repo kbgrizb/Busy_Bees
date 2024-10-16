@@ -95,6 +95,7 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         title: const Text('BusyBees'),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final appState = context.read<ApplicationState>();
@@ -159,7 +160,7 @@ class _CalendarPageState extends State<CalendarPage> {
         child: const Icon(Icons.add),
       ),
       body: Column(
-        children: [
+        children: [Image.asset('assets/BeeBanner.png'),
           TableCalendar<Event>(
             headerStyle: const HeaderStyle(
               formatButtonVisible: false,
