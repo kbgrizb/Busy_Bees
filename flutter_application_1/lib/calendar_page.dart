@@ -183,7 +183,7 @@ List<Event>? list;
               ),
               child: ListTile(
                 onTap: ()=>print(""),
-                title:Text("${value[index]}"),
+                title:Text(value[index].title),
                 subtitle: Text(value[index].description),
               ),
             );
