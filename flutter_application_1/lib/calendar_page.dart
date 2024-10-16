@@ -111,8 +111,11 @@ List<Event>? list;
                       ],
                     ),
                     actions: [
-                      ElevatedButton(
-                        onPressed: () {
+                      ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: _eventNameController,
+                      builder: (context, value, child) {
+                      return ElevatedButton(
+                        onPressed: value.text.isNotEmpty? () {
                           User? user = FirebaseAuth.instance.currentUser;
 
                           FirebaseFirestore.instance.collection('events').add(<String, dynamic>{
@@ -137,8 +140,11 @@ List<Event>? list;
                           _descriptionController.clear();
                           Navigator.of(context).pop();
                           _selectedEvents.value = _getEventsForDay(_selectedDay!);
-                        },
+                        }
+                        : null,
                         child: const Text("OK"),
+                      );
+                      },
                       ),
                     ],
                   );
