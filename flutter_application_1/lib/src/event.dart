@@ -16,9 +16,7 @@ class Event {
       return title;
     }
 
-    DateTime getDate(){
-      return dateAndTime;
-    }
+    
 
 
 }
