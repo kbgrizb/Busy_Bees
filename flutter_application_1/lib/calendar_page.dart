@@ -1,10 +1,10 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gtk_flutter/app_state.dart';
-import 'package:gtk_flutter/objects/events.dart';
 import 'package:gtk_flutter/src/authentication.dart';
 import 'package:gtk_flutter/src/event.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
@@ -42,12 +42,16 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
     
+    _geteventsFromFirestone();
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
+  Future<void> _geteventsFromFirestone() async{}
+
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -86,7 +90,8 @@ List<Event>? list;
               final appState = context.read<ApplicationState>();
               if (!appState.loggedIn) {
                 context.push('/sign-in');
-              } else {
+                
+              } else {  
                 showDialog(
                 context: context,
                 builder: (context) {
@@ -108,6 +113,16 @@ List<Event>? list;
                     actions: [
                       ElevatedButton(
                         onPressed: () {
+                          User? user = FirebaseAuth.instance.currentUser;
+
+                          FirebaseFirestore.instance.collection('events').add(<String, dynamic>{
+                            'description': _descriptionController.text,
+                            'date': _selectedDay,
+                            'eventname': _eventNameController.text,
+                            'name': FirebaseAuth.instance.currentUser!.displayName,
+                            'userId': FirebaseAuth.instance.currentUser!.uid,
+                          });
+
                           if (events[_selectedDay] != null) {
                             list = events[_selectedDay]!;
                             events.addAll({
