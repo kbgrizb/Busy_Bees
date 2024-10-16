@@ -26,7 +26,6 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat calendarFormat = CalendarFormat.month;
   late final ValueNotifier<List<Event>> _selectedEvents;
 
-
   StreamSubscription<QuerySnapshot>? _guestBookSubscription;
   Map<DateTime, List<Event>> events = {};
 
@@ -94,11 +93,8 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('BusyBees'),
-        foregroundColor: Color.fromARGB(255, 221, 192, 0)
       ),
-
       floatingActionButton: FloatingActionButton(
-        backgroundColor:Color.fromARGB(255, 255, 208, 0),
         onPressed: () {
           final appState = context.read<ApplicationState>();
           if (!appState.loggedIn) {
@@ -127,7 +123,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       onPressed: () {
                         DateTime selectedDay = DateTime(
                           _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-                          
+
                         FirebaseFirestore.instance.collection('events').add({
                           'description': _descriptionController.text,
                           'date': selectedDay,  // Save normalized date
@@ -135,7 +131,8 @@ class _CalendarPageState extends State<CalendarPage> {
                           'name': FirebaseAuth.instance.currentUser!.displayName,
                           'userId': FirebaseAuth.instance.currentUser!.uid,
                         });
-                        String curUser = FirebaseAuth.instance.currentUser!.uid;
+
+                       String curUser = FirebaseAuth.instance.currentUser!.uid;
 
                         if (events[selectedDay] != null) {
                           events[selectedDay]!.add(
@@ -163,25 +160,29 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       body: Column(
         children: [Image.asset('assets/BeeBanner.png'),
-          TableCalendar<Event>(
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-            ),
-            firstDay: DateTime.utc(2024, 1, 1),
+          TableCalendar(
+        headerStyle: const HeaderStyle(
+        formatButtonVisible: false,
+        ),
+        firstDay: DateTime.utc(2024, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
         focusedDay: _focusedDay,
         calendarStyle: const CalendarStyle(
         defaultTextStyle:TextStyle(color: Colors.orange),
         weekendTextStyle:TextStyle(color: Colors.amber),
         todayDecoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
-        selectedDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+        selectedDecoration: BoxDecoration(color: Color.fromARGB(255, 236, 21, 150), shape: BoxShape.circle),
         markerDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle)
         ),
-            onDaySelected: _onDaySelected,
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
-          ),
+        eventLoader: _getEventsForDay,
+        selectedDayPredicate: (day) {
+          return isSameDay(_selectedDay, day);
+        },
+        onDaySelected: _onDaySelected,
+        onPageChanged: (focusedDay) {
+          _focusedDay = focusedDay;
+        },
+      ),
           SizedBox(height: 8.0),
           Expanded(
             child: ValueListenableBuilder<List<Event>>(
