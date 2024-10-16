@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';               // new
@@ -14,7 +15,7 @@ import 'calendar_page.dart';
 void main() {
   // Modify from here...
   WidgetsFlutterBinding.ensureInitialized();
-
+  Firebase.initializeApp();
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
     builder: ((context, child) => const App()),

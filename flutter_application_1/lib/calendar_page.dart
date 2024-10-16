@@ -182,7 +182,7 @@ List<Event>? list;
               MaterialPageRoute(
         
                 builder: (context) => UpcomingEventsPage(
-                  upcomingEventsList: UpcomingEventsList(eventsData: events)),
+                  upcomingEventsList: UpcomingEventsList(eventsData: _getAllEvents())),
                 //*********************eventsList is the events stored in the cloud, a test item is commented out at the top****************
               ),
             );},
