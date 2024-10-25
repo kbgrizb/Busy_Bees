@@ -14,4 +14,20 @@ void main() {
     expect(find.text('Firebase Meetup'), findsOneWidget);
     expect(find.text('January 1st'), findsNothing);
   });
+
+  testWidgets('Adding event adds event to list', (WidgetTester tester) async {
+
+  });
+
+  testWidgets('Adding event adds event to list and appears on correct day on screen', (WidgetTester tester) async {
+
+  });
+
+  testWidgets('Adding event adds event to list and appears on upcoming events', (WidgetTester tester) async {
+
+  });
+
+  testWidgets('Past events dont appear on upcoming events', (WidgetTester tester) async {
+
+  });
 }
