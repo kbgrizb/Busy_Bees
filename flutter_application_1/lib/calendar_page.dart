@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gtk_flutter/app_state.dart';
+import 'package:gtk_flutter/profile_screen.dart';
 import 'package:gtk_flutter/src/event.dart';
 import 'package:gtk_flutter/upcoming_events_list.dart';
 import 'package:gtk_flutter/upcoming_events_page.dart';
@@ -46,13 +48,17 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Future<void> getEventsFromFirestore() async {
-    FirebaseFirestore.instance.collection('events').snapshots().listen((snapshot) {
+    FirebaseFirestore.instance
+        .collection('events')
+        .snapshots()
+        .listen((snapshot) {
       setState(() {
-        events.clear();  
+        events.clear();
 
         for (var doc in snapshot.docs) {
           DateTime eventDate = (doc['date'] as Timestamp).toDate();
-          DateTime normalizedDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
+          DateTime normalizedDate =
+              DateTime(eventDate.year, eventDate.month, eventDate.day);
 
           Event event = Event(
             doc['eventname'],
@@ -91,137 +97,178 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BusyBees'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final appState = context.read<ApplicationState>();
-          if (!appState.loggedIn) {
-            context.push('/sign-in');
-          } else {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  scrollable: true,
-                  title: const Text("Add New Event"),
-                  content: Column(
-                    children: [
-                      TextField(
-                        controller: _eventNameController,
-                        decoration: const InputDecoration(hintText: "Event Name"),
-                      ),
-                      TextField(
-                        controller: _descriptionController,
-                        decoration: const InputDecoration(hintText: "Event Description"),
+        appBar: AppBar(
+          title: const Text('BusyBees'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            final appState = context.read<ApplicationState>();
+            if (!appState.loggedIn) {
+              context.push('/sign-in');
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    scrollable: true,
+                    title: const Text("Add New Event"),
+                    content: Column(
+                      children: [
+                        TextField(
+                          controller: _eventNameController,
+                          decoration:
+                              const InputDecoration(hintText: "Event Name"),
+                        ),
+                        TextField(
+                          controller: _descriptionController,
+                          decoration: const InputDecoration(
+                              hintText: "Event Description"),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        onPressed: () {
+                          DateTime selectedDay = DateTime(_selectedDay!.year,
+                              _selectedDay!.month, _selectedDay!.day);
+
+                          FirebaseFirestore.instance.collection('events').add({
+                            'description': _descriptionController.text,
+                            'date': selectedDay, // Save normalized date
+                            'eventname': _eventNameController.text,
+                            'name':
+                                FirebaseAuth.instance.currentUser!.displayName,
+                            'userId': FirebaseAuth.instance.currentUser!.uid,
+                          });
+
+                          String curUser =
+                              FirebaseAuth.instance.currentUser!.uid;
+
+                          if (events[selectedDay] != null) {
+                            events[selectedDay]!.add(
+                              Event(
+                                  _eventNameController.text,
+                                  _descriptionController.text,
+                                  selectedDay,
+                                  curUser),
+                            );
+                          } else {
+                            events[selectedDay] = [
+                              Event(
+                                  _eventNameController.text,
+                                  _descriptionController.text,
+                                  selectedDay,
+                                  curUser)
+                            ];
+                          }
+                          _eventNameController.clear();
+                          _descriptionController.clear();
+                          Navigator.of(context).pop();
+                          _selectedEvents.value = _getEventsForDay(selectedDay);
+                        },
+                        child: const Text("OK"),
                       ),
                     ],
-                  ),
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        DateTime selectedDay = DateTime(
-                          _selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-
-                        FirebaseFirestore.instance.collection('events').add({
-                          'description': _descriptionController.text,
-                          'date': selectedDay,  // Save normalized date
-                          'eventname': _eventNameController.text,
-                          'name': FirebaseAuth.instance.currentUser!.displayName,
-                          'userId': FirebaseAuth.instance.currentUser!.uid,
-                        });
-
-                       String curUser = FirebaseAuth.instance.currentUser!.uid;
-
-                        if (events[selectedDay] != null) {
-                          events[selectedDay]!.add(
-                            Event(_eventNameController.text, _descriptionController.text, selectedDay,curUser),
-                          );
-                        } else {
-                          events[selectedDay] = [
-                            Event(_eventNameController.text, _descriptionController.text, selectedDay,curUser)
-                          ];
-                        }
-                        _eventNameController.clear();
-                        _descriptionController.clear();
-                        Navigator.of(context).pop();
-                        _selectedEvents.value = _getEventsForDay(selectedDay);
-                      },
-                      child: const Text("OK"),
-                    ),
-                  ],
-                );
+                  );
+                },
+              );
+            }
+          },
+          child: const Icon(Icons.add),
+        ),
+        body: Column(
+          children: [
+            Image.asset('assets/BeeBanner.png'),
+            TableCalendar(
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+              ),
+              firstDay: DateTime.utc(2024, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
+              focusedDay: _focusedDay,
+              calendarStyle: const CalendarStyle(
+                  defaultTextStyle: TextStyle(color: Colors.orange),
+                  weekendTextStyle: TextStyle(color: Colors.amber),
+                  todayDecoration: BoxDecoration(
+                      color: Colors.yellow, shape: BoxShape.circle),
+                  selectedDecoration: BoxDecoration(
+                      color: Color.fromARGB(255, 236, 21, 150),
+                      shape: BoxShape.circle),
+                  markerDecoration: BoxDecoration(
+                      color: Colors.orange, shape: BoxShape.circle)),
+              eventLoader: _getEventsForDay,
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
               },
-            );
-          }
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: Column(
-        children: [Image.asset('assets/BeeBanner.png'),
-          TableCalendar(
-        headerStyle: const HeaderStyle(
-        formatButtonVisible: false,
-        ),
-        firstDay: DateTime.utc(2024, 1, 1),
-        lastDay: DateTime.utc(2030, 12, 31),
-        focusedDay: _focusedDay,
-        calendarStyle: const CalendarStyle(
-        defaultTextStyle:TextStyle(color: Colors.orange),
-        weekendTextStyle:TextStyle(color: Colors.amber),
-        todayDecoration: BoxDecoration(color: Colors.yellow, shape: BoxShape.circle),
-        selectedDecoration: BoxDecoration(color: Color.fromARGB(255, 236, 21, 150), shape: BoxShape.circle),
-        markerDecoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle)
-        ),
-        eventLoader: _getEventsForDay,
-        selectedDayPredicate: (day) {
-          return isSameDay(_selectedDay, day);
-        },
-        onDaySelected: _onDaySelected,
-        onPageChanged: (focusedDay) {
-          _focusedDay = focusedDay;
-        },
-      ),
-          SizedBox(height: 8.0),
-          Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ListTile(
-                        title: Text(value[index].getTitle()),
-                        subtitle: Text(value[index].description),
-                        trailing: Text(value[index].getUsername()),
-                      ),
-                    );
-                  },
-                );
+              onDaySelected: _onDaySelected,
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
               },
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: ElevatedButton(
-        onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => UpcomingEventsPage(
-                upcomingEventsList: UpcomingEventsList(eventsData: events),
+            SizedBox(height: 8.0),
+            Expanded(
+              child: ValueListenableBuilder<List<Event>>(
+                valueListenable: _selectedEvents,
+                builder: (context, value, _) {
+                  return ListView.builder(
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListTile(
+                          title: Text(value[index].getTitle()),
+                          subtitle: Text(value[index].description),
+                          trailing: Text(value[index].getUsername()),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
-          );
-        },
-        child: const Icon(Icons.list),
-      ),
-    );
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      final currentUser = FirebaseAuth.instance.currentUser;
+                      final username = currentUser?.displayName ?? "Guest";
+
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                username: username,
+                                userColor: Color.fromARGB(255, 151, 184, 61))),
+                      );
+                    },
+                    icon: const Icon(Icons.person),
+                    label: const Text('Profile'),
+                  ),
+                  const SizedBox(width: 35.0),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => UpcomingEventsPage(
+                            upcomingEventsList:
+                                UpcomingEventsList(eventsData: events),
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Icon(Icons.list),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }
