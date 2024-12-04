@@ -1,6 +1,9 @@
 //username and color/ability to choose color
 
 import 'package:flutter/material.dart';
+import 'package:gtk_flutter/app_state.dart';
+import 'package:gtk_flutter/profile_colorpicker.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key, required this.username, required this.userColor});
@@ -23,125 +26,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
     currentColor = widget.userColor;
   }
 
-  void _editUsername() {
-    showDialog(
+  Future<void> _pickColor() async {
+    currentColor = context.read<ApplicationState>().currentColor;
+    final newColor = await showDialog<Color>(
       context: context,
-      builder: (context) {
-        final TextEditingController _usernameController =
-            TextEditingController(text: currentUsername);
-
-        return AlertDialog(
-          title: const Text("Edit Username"),
-          content: TextField(
-            controller: _usernameController,
-            decoration: const InputDecoration(
-              labelText: "New Username",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            //Doesn't save for now
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  currentUsername = _usernameController.text;
-                });
-                Navigator.pop(context);
-              },
-              child: const Text("Save"),
-            ),
-          ],
-        );
-      },
+      builder: (context) => ProfileColorPicker(initialColor: currentColor),
     );
-  }
 
-  void _editColor() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        Color selectedColor = currentColor;
-        //Subject to change
-        return AlertDialog(
-          title: const Text("Choose a Color"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                ...[
-                  Colors.red,
-                  Colors.green,
-                  Colors.blue,
-                  Colors.yellow,
-                  Colors.orange,
-                  Colors.purple,
-                  Colors.pink,
-                ].map((color) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedColor = color;
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      width: 100,
-                      height: 40,
-                      color: color,
-                    ),
-                  );
-                }).toList(),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            //doesn't save either
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  currentColor = selectedColor;
-                });
-                Navigator.pop(context);
-              },
-              child: const Text("Save"),
-            ),
-          ],
-        );
-      },
-    );
+    if (newColor != null) {
+      setState(() {
+        currentColor = newColor;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 255, 244, 181),
           title: const Text(
-        "Profile",
-      )),
+            "Profile",
+            style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+          )),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 20.0),
             Row(
               children: [
-                const Text(
-                  //WIP
+                Text(
                   "Username: $currentUsername",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Expanded(
-                  child: Text(
-                    currentUsername,
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                  style: const TextStyle(fontSize: 30),
                 ),
               ],
             ),
@@ -150,13 +68,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 const Text(
                   "Color: ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 30),
                 ),
-                Container(
-                  width: 24,
-                  height: 24,
-                  color: currentColor,
-                ),
+                GestureDetector(
+                  onTap: _pickColor,
+                  child: Container(
+                      width: 50,
+                      height: 50,
+                      color: currentColor,
+                      child: const IconButton(
+                          onPressed: null,
+                          icon: Icon(Icons.edit,
+                              color: Color.fromARGB(255, 54, 54, 0)))),
+                )
               ],
             ),
           ],
