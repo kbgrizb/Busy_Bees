@@ -96,6 +96,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentColor = context.watch<ApplicationState>().currentColor;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('BusyBees'),
@@ -186,16 +188,16 @@ class _CalendarPageState extends State<CalendarPage> {
               firstDay: DateTime.utc(2024, 1, 1),
               lastDay: DateTime.utc(2030, 12, 31),
               focusedDay: _focusedDay,
-              calendarStyle: const CalendarStyle(
-                  defaultTextStyle: TextStyle(color: Colors.orange),
-                  weekendTextStyle: TextStyle(color: Colors.amber),
+              calendarStyle: CalendarStyle(
+                  defaultTextStyle: const TextStyle(color: Colors.orange),
+                  weekendTextStyle: const TextStyle(color: Colors.amber),
+                  // Changed to reflect chosen color
                   todayDecoration: BoxDecoration(
-                      color: Colors.yellow, shape: BoxShape.circle),
+                      color: currentColor, shape: BoxShape.circle),
                   selectedDecoration: BoxDecoration(
-                      color: Color.fromARGB(255, 236, 21, 150),
-                      shape: BoxShape.circle),
+                      color: currentColor, shape: BoxShape.circle),
                   markerDecoration: BoxDecoration(
-                      color: Colors.orange, shape: BoxShape.circle)),
+                      color: currentColor, shape: BoxShape.circle)),
               eventLoader: _getEventsForDay,
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
@@ -236,21 +238,21 @@ class _CalendarPageState extends State<CalendarPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // Profile Button
                   ElevatedButton.icon(
                     onPressed: () async {
                       final currentUser = FirebaseAuth.instance.currentUser;
                       final username = currentUser?.displayName ?? "Guest";
-
                       await Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (context) => ProfileScreen(
-                                username: username,
-                                userColor: Color.fromARGB(255, 151, 184, 61))),
+                                username: username, userColor: currentColor)),
                       );
                     },
                     icon: const Icon(Icons.person),
                     label: const Text('Profile'),
                   ),
+                  // Moved Upcoming Events button
                   const SizedBox(width: 35.0),
                   ElevatedButton(
                     onPressed: () async {

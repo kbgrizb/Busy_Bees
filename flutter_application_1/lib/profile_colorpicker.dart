@@ -26,6 +26,14 @@ class _ProfileColorPickerState extends State<ProfileColorPicker> {
         value: selectedColor,
         items: const [
           DropdownMenuItem(
+            value: Colors.red,
+            child: Text("Red", style: TextStyle(color: Colors.red)),
+          ),
+          DropdownMenuItem(
+            value: Colors.orange,
+            child: Text("Orange", style: TextStyle(color: Colors.orange)),
+          ),
+          DropdownMenuItem(
             value: Colors.yellow,
             child: Text("Yellow", style: TextStyle(color: Colors.yellow)),
           ),
@@ -38,12 +46,8 @@ class _ProfileColorPickerState extends State<ProfileColorPicker> {
             child: Text("Blue", style: TextStyle(color: Colors.blue)),
           ),
           DropdownMenuItem(
-            value: Colors.red,
-            child: Text("Red", style: TextStyle(color: Colors.red)),
-          ),
-          DropdownMenuItem(
-            value: Colors.orange,
-            child: Text("Orange", style: TextStyle(color: Colors.orange)),
+            value: Colors.purple,
+            child: Text("Purple", style: TextStyle(color: Colors.purple)),
           ),
         ],
         onChanged: (Color? value) {

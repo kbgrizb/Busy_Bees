@@ -26,17 +26,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     currentColor = widget.userColor;
   }
 
+  // Triggers color picker
   Future<void> _pickColor() async {
-    currentColor = context.read<ApplicationState>().currentColor;
     final newColor = await showDialog<Color>(
       context: context,
       builder: (context) => ProfileColorPicker(initialColor: currentColor),
     );
-
     if (newColor != null) {
       setState(() {
         currentColor = newColor;
       });
+      // Updates the color in the app state
+      context.read<ApplicationState>().updateProfileColor(newColor);
     }
   }
 
