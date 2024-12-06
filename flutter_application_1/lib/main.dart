@@ -114,7 +114,7 @@ class App extends StatelessWidget {
             ),
         primarySwatch: Colors.deepPurple,
         textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
+         Theme.of(context).textTheme,
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,
