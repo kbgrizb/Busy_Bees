@@ -14,10 +14,10 @@ import 'calendar_page.dart';
 
 
 
-void main() {
+void main() async{
   // Modify from here...
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
     builder: ((context, child) => const App()),
@@ -116,7 +116,7 @@ class App extends StatelessWidget {
             ),
         primarySwatch: Colors.deepPurple,
         textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
+         Theme.of(context).textTheme,
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         useMaterial3: true,

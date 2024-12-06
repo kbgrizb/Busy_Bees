@@ -5,7 +5,8 @@ class Event {
     final DateTime dateAndTime;
     final String description;
     final String username;
-    Event(this.title, this.description, this.dateAndTime,this.username);
+    final int color;
+    Event(this.title, this.description, this.dateAndTime,this.username,this.color);
 
   
 
@@ -19,6 +20,9 @@ class Event {
 
     String getUsername(){
       return username;
+    }
+    int getColor(){
+      return color;
     }
 
 
