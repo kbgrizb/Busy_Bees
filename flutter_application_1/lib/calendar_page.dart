@@ -25,6 +25,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   TextEditingController _eventNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
   CalendarFormat calendarFormat = CalendarFormat.month;
   late final ValueNotifier<List<Event>> _selectedEvents;
 
@@ -43,6 +44,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedEvents.dispose();
     _eventNameController.dispose();
     _descriptionController.dispose();
+    _timeController.dispose();
     super.dispose();
   }
 
@@ -143,13 +145,32 @@ Widget _buildEventMarkers(List<Event> events) {
                           decoration: const InputDecoration(
                               hintText: "Event Description"),
                         ),
+                        TextField(
+                          controller: _timeController,
+                          decoration: const InputDecoration(
+                              hintText: "Time"),
+                          keyboardType: TextInputType.datetime,
+                        ),
                       ],
                     ),
                     actions: [
                       ElevatedButton(
                         onPressed: () {
+
+                          List<String> hoursAndMinutes = _timeController.text.split(':');
+                          int hours;
+                          int minutes;
+                          
+                          if(hoursAndMinutes.length > 1) {
+                            hours = int.parse(hoursAndMinutes[0]);
+                            minutes = int.parse(hoursAndMinutes[1]);
+                          } else {
+                            hours = 0;
+                            minutes = 0;
+                          }
+
                           DateTime selectedDay = DateTime(_selectedDay!.year,
-                              _selectedDay!.month, _selectedDay!.day);
+                              _selectedDay!.month, _selectedDay!.day, hours, minutes);
                             int current = currentColor.value;
                           FirebaseFirestore.instance.collection('events').add({
                             'description': _descriptionController.text,
@@ -169,7 +190,12 @@ Widget _buildEventMarkers(List<Event> events) {
                               Event(
                                   _eventNameController.text,
                                   _descriptionController.text,
-                                  selectedDay,
+                                  DateTime(selectedDay.year,
+                                  selectedDay.month,
+                                  selectedDay.day,
+                                  hours,
+                                  minutes,
+                                  ),
                                   curUser,current),
                             );
                           } else {
@@ -177,7 +203,12 @@ Widget _buildEventMarkers(List<Event> events) {
                               Event(
                                   _eventNameController.text,
                                   _descriptionController.text,
-                                  selectedDay,
+                                  DateTime(selectedDay.year,
+                                  selectedDay.month,
+                                  selectedDay.day,
+                                  hours,
+                                  minutes,
+                                  ),
                                   curUser,current)
                             ];
                           }
@@ -252,6 +283,7 @@ Widget _buildEventMarkers(List<Event> events) {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ListTile(
+                          leading: Text(value[index].dateAndTime.hour.toString() + ':' + value[index].dateAndTime.minute.toString()),
                           title: Text(value[index].getTitle()),
                           subtitle: Text(value[index].description),
                           trailing: Text(value[index].getUsername()),
