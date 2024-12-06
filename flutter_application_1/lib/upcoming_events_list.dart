@@ -52,6 +52,7 @@ class _EventListItemState extends State<EventListItem> {
     return ListTile(   
       title: Text(widget.event.title,),
       subtitle: Text(widget.event.description),
+      trailing: Text(widget.event.dateAndTime.hour.toString() + ':' + widget.event.dateAndTime.minute.toString())
     );
   }
 }
