@@ -12,7 +12,7 @@ import 'package:gtk_flutter/upcoming_events_page.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'src/widgets.dart';
-
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 class CalendarPage extends StatefulWidget {
   CalendarPage({super.key});
 
@@ -30,7 +30,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   StreamSubscription<QuerySnapshot>? _guestBookSubscription;
   Map<DateTime, List<Event>> events = {};
-
   @override
   void initState() {
     super.initState();
@@ -54,17 +53,20 @@ class _CalendarPageState extends State<CalendarPage> {
         .listen((snapshot) {
       setState(() {
         events.clear();
-
         for (var doc in snapshot.docs) {
+          Map<String, dynamic> map = doc.data();
           DateTime eventDate = (doc['date'] as Timestamp).toDate();
-          DateTime normalizedDate =
-              DateTime(eventDate.year, eventDate.month, eventDate.day);
-
+          DateTime normalizedDate = DateTime(eventDate.year, eventDate.month, eventDate.day);
+          int clrNum = Colors.black.value;
+          if (map.containsKey('color')){
+            clrNum = map['color'];
+          }
           Event event = Event(
             doc['eventname'],
             doc['description'],
             eventDate,
             doc['name'],
+            clrNum
           );
 
           if (events[normalizedDate] != null) {
@@ -93,7 +95,22 @@ class _CalendarPageState extends State<CalendarPage> {
       });
     }
   }
-
+Widget _buildEventMarkers(List<Event> events) {
+    return Row(
+      mainAxisSize: MainAxisSize.min, 
+      children: events.map((event) {
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 1),
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: Color(event.color),
+            shape: BoxShape.circle,
+          ),
+        );
+      }).toList(),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final currentColor = context.watch<ApplicationState>().currentColor;
@@ -133,7 +150,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         onPressed: () {
                           DateTime selectedDay = DateTime(_selectedDay!.year,
                               _selectedDay!.month, _selectedDay!.day);
-
+                            int current = currentColor.value;
                           FirebaseFirestore.instance.collection('events').add({
                             'description': _descriptionController.text,
                             'date': selectedDay, // Save normalized date
@@ -141,6 +158,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             'name':
                                 FirebaseAuth.instance.currentUser!.displayName,
                             'userId': FirebaseAuth.instance.currentUser!.uid,
+                            'color': current
                           });
 
                           String curUser =
@@ -152,7 +170,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                   _eventNameController.text,
                                   _descriptionController.text,
                                   selectedDay,
-                                  curUser),
+                                  curUser,current),
                             );
                           } else {
                             events[selectedDay] = [
@@ -160,7 +178,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                   _eventNameController.text,
                                   _descriptionController.text,
                                   selectedDay,
-                                  curUser)
+                                  curUser,current)
                             ];
                           }
                           _eventNameController.clear();
@@ -206,6 +224,17 @@ class _CalendarPageState extends State<CalendarPage> {
               onPageChanged: (focusedDay) {
                 _focusedDay = focusedDay;
               },
+              calendarBuilders: CalendarBuilders(
+          markerBuilder: (context, day, events) {
+            if (events.isEmpty) return SizedBox();
+            return Positioned(
+              bottom: 4, 
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _buildEventMarkers(_getEventsForDay(day)),
+              ));},
+      ),
             ),
             SizedBox(height: 8.0),
             Expanded(
