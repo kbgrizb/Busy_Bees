@@ -5,19 +5,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';               // new
+import 'package:go_router/go_router.dart'; // new
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';                 // new
+import 'package:provider/provider.dart'; // new
 
-import 'app_state.dart';                                 // new
+import 'app_state.dart'; // new
 import 'calendar_page.dart';
 
-
-
-void main() {
+Future<void> main() async {
   // Modify from here...
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
     builder: ((context, child) => const App()),

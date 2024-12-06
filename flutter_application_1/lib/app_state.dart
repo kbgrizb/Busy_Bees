@@ -11,6 +11,15 @@ class ApplicationState extends ChangeNotifier {
     init();
   }
 
+  // Added storage for colors, default is yellow
+  Color _currentColor = Colors.yellow;
+  Color get currentColor => _currentColor;
+
+  void updateProfileColor(Color newColor) {
+    _currentColor = newColor;
+    notifyListeners();
+  }
+
   bool _loggedIn = false;
   bool get loggedIn => _loggedIn;
 
